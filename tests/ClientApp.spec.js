@@ -5,6 +5,7 @@ test("new test", async ({ page }) => {
   const username = await page.locator("#username");
   const password = await page.locator("#password");
   const selectBox = await page.locator("select.form-control");
+  const documentLink = await page.locator("[href*='documents-request']");
   await username.fill("rahulshettyacademy");
   await password.fill("learning");
   await selectBox.selectOption("consult");
@@ -22,5 +23,8 @@ test("new test", async ({ page }) => {
   // await console.log("hi");
   /// toBeFalsy()
   await page.locator("#terms").uncheck();
-  await expect(await page.locator("#terms").isChecked()).toBeFalsy();
+  expect(await page.locator("#terms").isChecked()).toBeFalsy();
+
+  //toHaveAttribute()
+  await expect(documentLink).toHaveAttribute("class", "blinkingText");
 });
