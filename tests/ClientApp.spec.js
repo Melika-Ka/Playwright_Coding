@@ -28,3 +28,18 @@ test("new test", async ({ page }) => {
   //toHaveAttribute()
   await expect(documentLink).toHaveAttribute("class", "blinkingText");
 });
+
+///
+
+test.only("@Child windows handling", async ({ browser }) => {
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
+
+  const documentLink = await page.locator("[href*='documents-request']");
+  /// handling parallel windows
+  const [newPage] = await Promise.all([
+    documentLink.click(),
+    context.waitForEvent("page"),
+  ]); // newPage is open in new tab
+});
