@@ -11,6 +11,14 @@ test("mini projet", async ({ page }) => {
   await page.locator("#login").click();
   await productList.last().waitFor({ state: "visible" });
   const count = await productList.count();
-  console.log(count)
+  console.log(count);
   await productList.last().locator("text= Add To Cart").click();
+  for (let i = 0; i < count; i++) {
+    if (
+      (await productList.nth(i).locator("b").textContent()) == "ZARA COAT 3"
+    ) {
+      await productList.nth(i).locator("text= Add To Cart").click();
+      break;
+    }
+  }
 });
