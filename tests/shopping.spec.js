@@ -21,4 +21,20 @@ test("mini projet", async ({ page }) => {
       break;
     }
   }
+
+  await page.locator("button[routerlink='/dashboard/cart']").click();
+  // await page.pause();
+
+  // https://playwright.dev/docs/api/class-page#page-wait-for-load-state
+  await page.locator(".infoWrap").first().waitFor();
+
+  // https://playwright.dev/docs/api/class-selectors
+  const is_visible = await page
+    .locator("h3:has-text('ZARA COAT 3')")
+    .isVisible();
+
+  // https://playwright.dev/docs/test-assertions
+  expect(is_visible).toBeTruthy();
+
+  await page.locator("button:has-text('Checkout')").click();
 });
