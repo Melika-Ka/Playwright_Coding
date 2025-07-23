@@ -37,4 +37,10 @@ test("mini projet", async ({ page }) => {
   expect(is_visible).toBeTruthy();
 
   await page.locator("button:has-text('Checkout')").click();
+
+  await page.locator(["[placeholder='Select Country']"]).fill("Ind");
+  const contryList = page.locator(".ta-results");
+  await contryList.waitFor({ state: "visible" });
+  const countryItemsCount = await contryList.locator("button.ta-item").count();
+  console.log(countryItemsCount);
 });
