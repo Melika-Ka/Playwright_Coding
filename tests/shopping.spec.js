@@ -11,7 +11,7 @@ test("mini projet", async ({ page }) => {
   await page.locator("#login").click();
   await productList.last().waitFor({ state: "visible" });
   const count = await productList.count();
-  console.log(count);
+  // console.log(count);
   await productList.last().locator("text= Add To Cart").click();
   for (let i = 0; i < count; i++) {
     if (
@@ -34,13 +34,24 @@ test("mini projet", async ({ page }) => {
     .isVisible();
 
   // https://playwright.dev/docs/test-assertions
-  expect(is_visible).toBeTruthy();
+  await expect(is_visible).toBeTruthy();
 
   await page.locator("button:has-text('Checkout')").click();
-
-  await page.locator(["[placeholder='Select Country']"]).fill("Ind");
-  const contryList = page.locator(".ta-results");
+  // https://playwright.dev/docs/api/class-locator#locator-press-sequentially
+  await page.locator("[placeholder='Select Country']").pressSequentially("ind");
+  const contryList = await page.locator(".ta-results");
   await contryList.waitFor({ state: "visible" });
   const countryItemsCount = await contryList.locator("button.ta-item").count();
-  console.log(countryItemsCount);
+  // console.log(countryItemsCount);
+  for (let i = 0; i < countryItemsCount; i++) {
+    const countryText = await contryList
+      .locator("button.ta-item")
+      .nth(i)
+      .textContent();
+    if (countryText.trim().toLowerCase() === "india") {
+      // console.log("check");
+      await contryList.locator("button.ta-item").nth(i).click();
+      break;
+    }
+  }
 });
