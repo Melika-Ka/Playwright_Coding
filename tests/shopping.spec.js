@@ -54,4 +54,10 @@ test("mini projet", async ({ page }) => {
       break;
     }
   }
+  // await page.locator(".user__name [type='text']").first();
+  await expect(page.locator(".user__name [type='text']").first()).toHaveText(
+    emailAddress
+  );
+  await page.locator(".actions .action__submit").click();
+  // await page.pause();
 });
