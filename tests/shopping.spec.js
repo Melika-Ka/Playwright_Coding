@@ -21,7 +21,6 @@ test("mini projet", async ({ page }) => {
       break;
     }
   }
-
   await page.locator("button[routerlink='/dashboard/cart']").click();
   // await page.pause();
 
@@ -60,4 +59,22 @@ test("mini projet", async ({ page }) => {
   );
   await page.locator(".actions .action__submit").click();
   // await page.pause();
+  await expect(page.locator("h1.hero-primary")).toContainText(
+    "Thankyou for the order."
+  );
+
+  // code for copy orderId
+
+  //
+
+  await page.locator('button[routerlink="/dashboard/myorders"]').click();
+  await page.locator("tbody .ng-star-inserted").first().waitFor();
+  const orderCount = await page.locator("tbody .ng-star-inserted").count();
+  for (let i = 0; i < orderCount; i++) {
+    const orderID = await page
+      .locator("tbody .ng-star-inserted")
+      .nth(i)
+      .locator("th")
+      .textContent();
+  }
 });
