@@ -12,7 +12,6 @@ test("mini projet", async ({ page }) => {
   await productList.last().waitFor({ state: "visible" });
   const count = await productList.count();
   // console.log(count);
-  await productList.last().locator("text= Add To Cart").click();
   for (let i = 0; i < count; i++) {
     if (
       (await productList.nth(i).locator("b").textContent()) == "ZARA COAT 3"
@@ -64,17 +63,32 @@ test("mini projet", async ({ page }) => {
   );
 
   // code for copy orderId
+  const orderID = await page
+    .locator(".em-spacer-1 .ng-star-inserted")
+    .textContent();
 
-  //
+  // console.log(orderID);
 
   await page.locator('button[routerlink="/dashboard/myorders"]').click();
   await page.locator("tbody .ng-star-inserted").first().waitFor();
   const orderCount = await page.locator("tbody .ng-star-inserted").count();
   for (let i = 0; i < orderCount; i++) {
-    const orderID = await page
+    const orderCheckedID = await page
       .locator("tbody .ng-star-inserted")
       .nth(i)
       .locator("th")
       .textContent();
+
+    if (orderID.includes(orderCheckedID)) {
+      await page
+        .locator("tbody .ng-star-inserted")
+        .nth(i)
+        .locator("button")
+        .first()
+        .click();
+      break;
+    }
   }
+  const orderIdReview = await page.locator(".row .col-text").textContent();
+  expect(orderID.includes(orderIdReview)).toBeTruthy();
 });
