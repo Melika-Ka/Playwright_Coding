@@ -11,6 +11,10 @@ test("mini projet", async ({ page }) => {
   await page.locator("#login").click();
   await productList.last().waitFor({ state: "visible" });
   const count = await productList.count();
-  console.log(count)
-  await productList.last().locator("text= Add To Cart").click();
+  console.log(count);
+
+  for (let i = 0; i < count; i++) {
+    await productList[i].locator("text= Add To Cart").click();
+  }
+  // await productList.last().locator("text= Add To Cart").click();
 });
