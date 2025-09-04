@@ -4,6 +4,7 @@ test("Calendar Checking", async ({ page }) => {
   const monthNumber = "6";
   const date = "15";
   const year = "2027";
+  let calendar = [monthNumber, date, year];
   await page.goto("https://rahulshettyacademy.com/seleniumPractise/#/offers");
   await page.locator(".react-date-picker__calendar-button").click();
   //   await page.pause();
@@ -15,6 +16,10 @@ test("Calendar Checking", async ({ page }) => {
     .nth(Number(monthNumber) - 1)
     .click();
   await page.locator("//abbr[text()='" + date + "']").click();
-  await page.pause();
+  // await page.pause();
+  const inputs = page.locator(".react-date-picker__inputGroup input");
+  for (let i = 0; i < inputs.count(); index++) {
+    expect(await inputs.nth(i).inputValue()).toBe(calendar[i]);
+  }
+  console.log("Test passed");
 });
-// react-calendar__tile react-calendar__month-view__days__day react-calendar__month-view__days__day--neighboringMonth
