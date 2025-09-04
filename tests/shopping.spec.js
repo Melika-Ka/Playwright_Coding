@@ -11,10 +11,84 @@ test("mini projet", async ({ page }) => {
   await page.locator("#login").click();
   await productList.last().waitFor({ state: "visible" });
   const count = await productList.count();
-  console.log(count);
-
+  // console.log(count);
   for (let i = 0; i < count; i++) {
-    await productList[i].locator("text= Add To Cart").click();
+    if (
+      (await productList.nth(i).locator("b").textContent()) == "ZARA COAT 3"
+    ) {
+      await productList.nth(i).locator("text= Add To Cart").click();
+      break;
+    }
   }
-  // await productList.last().locator("text= Add To Cart").click();
+  await page.locator("button[routerlink='/dashboard/cart']").click();
+  // await page.pause();
+
+  // https://playwright.dev/docs/api/class-page#page-wait-for-load-state
+  await page.locator(".infoWrap").first().waitFor();
+
+  // https://playwright.dev/docs/api/class-selectors
+  const is_visible = await page
+    .locator("h3:has-text('ZARA COAT 3')")
+    .isVisible();
+
+  // https://playwright.dev/docs/test-assertions
+  await expect(is_visible).toBeTruthy();
+
+  await page.locator("button:has-text('Checkout')").click();
+  // https://playwright.dev/docs/api/class-locator#locator-press-sequentially
+  await page.locator("[placeholder='Select Country']").pressSequentially("ind");
+  const contryList = await page.locator(".ta-results");
+  await contryList.waitFor({ state: "visible" });
+  const countryItemsCount = await contryList.locator("button.ta-item").count();
+  // console.log(countryItemsCount);
+  for (let i = 0; i < countryItemsCount; i++) {
+    const countryText = await contryList
+      .locator("button.ta-item")
+      .nth(i)
+      .textContent();
+    if (countryText.trim().toLowerCase() === "india") {
+      // console.log("check");
+      await contryList.locator("button.ta-item").nth(i).click();
+      break;
+    }
+  }
+  // await page.locator(".user__name [type='text']").first();
+  await expect(page.locator(".user__name [type='text']").first()).toHaveText(
+    emailAddress
+  );
+  await page.locator(".actions .action__submit").click();
+  // await page.pause();
+  await expect(page.locator("h1.hero-primary")).toContainText(
+    "Thankyou for the order."
+  );
+
+  // code for copy orderId
+  const orderID = await page
+    .locator(".em-spacer-1 .ng-star-inserted")
+    .textContent();
+
+  // console.log(orderID);
+
+  await page.locator('button[routerlink="/dashboard/myorders"]').click();
+  await page.locator("tbody .ng-star-inserted").first().waitFor();
+  const orderCount = await page.locator("tbody .ng-star-inserted").count();
+  for (let i = 0; i < orderCount; i++) {
+    const orderCheckedID = await page
+      .locator("tbody .ng-star-inserted")
+      .nth(i)
+      .locator("th")
+      .textContent();
+
+    if (orderID.includes(orderCheckedID)) {
+      await page
+        .locator("tbody .ng-star-inserted")
+        .nth(i)
+        .locator("button")
+        .first()
+        .click();
+      break;
+    }
+  }
+  const orderIdReview = await page.locator(".row .col-text").textContent();
+  expect(orderID.includes(orderIdReview)).toBeTruthy();
 });
