@@ -16,3 +16,13 @@ test("more vlaidation", async ({ page }) => {
   expect(await page.locator("#displayed-text").isVisible()).toBeFalsy();
   console.log("Test passed");
 });
+
+test("Handling Popup", async ({ page }) => {
+  await page.goto("https://rahulshettyacademy.com/AutomationPractice/");
+  await expect(page.locator("#displayed-text")).toBeVisible();
+  // https://playwright.dev/docs/dialogs#:~:text=By%20default%2C%20dialogs%20are%20auto,dismiss()%20it.
+  page.on("dialog", (dialog) => {
+    dialog.accept();
+  });
+  await page.locator("#confirmbtn").click();
+});
