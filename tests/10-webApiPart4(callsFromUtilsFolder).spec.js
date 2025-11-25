@@ -11,36 +11,8 @@ const orderPaLoad = {
 let response;
 test.beforeAll(async () => {
   const apiContext = await request.newContext();
-  const APIUtils = APIUtils(apiContext, loginPayLoad);
-  response = APIUtils.createOrder(orderPaLoad);
-
-  // const loginResponse = await apiContext.post(
-  //   "https://rahulshettyacademy.com/api/ecom/auth/login",
-  //   {
-  //     data: loginPayLoad,
-  //   }
-  // );
-  // expect(loginResponse.ok()).toBeTruthy();
-  // const loginDataJson = await loginResponse.json();
-  // console.log(loginDataJson);
-  // token = await loginDataJson.token;
-  // console.log("token", token);
-
-  // const orderResponse = await apiContext.post(
-  //   "https://rahulshettyacademy.com/api/ecom/order/create-order",
-  //   {
-  //     data: orderPaLoad,
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: token,
-  //     },
-  //   }
-  // );
-  // expect(orderResponse.ok()).toBeTruthy();
-  // const orderDataJson = await orderResponse.json();
-  // console.log("orderDataJson", orderDataJson);
-  // orderId = await orderDataJson.orders[0];
-  // console.log("orderId : ", orderId);
+  const ApiUtils = new APIUtils(apiContext, loginPayLoad);
+  response = await ApiUtils.createOrder(orderPaLoad);
 });
 
 test("mini projet", async ({ page }) => {
@@ -59,6 +31,6 @@ test("mini projet", async ({ page }) => {
     .first()
     .click();
   const orderIdReview = page.locator(".row .col-text");
-  await page.pause();
   await expect(orderIdReview).toContainText(response.orderId);
+  console.log("Done");
 });
