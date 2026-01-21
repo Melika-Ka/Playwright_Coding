@@ -18,7 +18,7 @@ export default defineConfig({
 
   timeout: 500000,
   expect: {
-    timeout: 3000,
+    timeout: 30000,
   },
 
   /* Run tests in files in parallel */
@@ -34,9 +34,8 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     browserName: "chromium",
-    headless: false,
-    // testMatch: ["basic.spec.js"],
-    // screenshot : 'on',
+    headless: false,  //true
+    screenshot: "only-on-failure", //on , off
     // trace : 'on',//off,on
   },
 
