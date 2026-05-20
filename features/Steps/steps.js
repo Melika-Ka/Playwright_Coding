@@ -8,13 +8,13 @@ import {
 } from "@cucumber/cucumber";
 import { chromium, expect } from "@playwright/test";
 
-setDefaultTimeout(60000);
+// setDefaultTimeout(60000);
 
-Before(async function () {
-  this.browser = await chromium.launch({ headless: false });
-  this.context = await this.browser.newContext();
-  this.page = await this.context.newPage();
-});
+// Before(async function () {
+//   this.browser = await chromium.launch({ headless: false });
+//   this.context = await this.browser.newContext();
+//   this.page = await this.context.newPage();
+// });
 
 // FIX 1: Accepts the two {string} variables from your feature file dynamically
 Given(
@@ -98,8 +98,8 @@ Then("Verify the order is placed successfully", async function () {
   await expect(orderIdReview).toContainText(orderID);
 });
 
-After(async function () {
-  if (this.browser) {
-    await this.browser.close();
-  }
-});
+// After(async function () {
+//   if (this.browser) {
+//     await this.browser.close();
+//   }
+// });
