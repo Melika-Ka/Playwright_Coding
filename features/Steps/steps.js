@@ -103,3 +103,17 @@ Then("Verify the order is placed successfully", async function () {
 //     await this.browser.close();
 //   }
 // });
+
+// run npx cucumber-js --tags "@invalidData"
+Given("Go to login page", async function () {
+  await this.page.goto("https://rahulshettyacademy.com/client");
+});
+When("Login with {string} and {string}", async function (email, password) {
+  await this.page.locator("#userEmail").fill(email);
+  await this.page.locator("#userPassword").fill(password);
+  await this.page.locator("#login").click();
+});
+Then("Error {string} is displayed", async function (errorMessage) {
+  await this.page.locator(".toast-message").waitFor({ state: "visible" });
+  await expect(this.page.locator(".toast-message")).toContainText(errorMessage);
+});
